@@ -72,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 				secondPointCount++;
 				break;
 		}
-
-
-
 		new android.os.Handler(android.os.Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
@@ -83,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 			}
 		});
 	}
-
 	public void clear() {
 		firstPointCount = 0;
 		secondPointCount = 0;
