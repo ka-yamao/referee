@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 		clearButton = findViewById(R.id.clear);
 		firstMinusButton = findViewById(R.id.firstMinusButton);
 		firstPlusButton = findViewById(R.id.firstPlusButton);
-		secondMinusButton = findViewById(R.id.firstMinusButton);
-		secondPlusButton = findViewById(R.id.firstPlusButton);
+		secondMinusButton = findViewById(R.id.secondMinusButton);
+		secondPlusButton = findViewById(R.id.secondPlusButton);
 
 		clearButton.setOnClickListener(this);
 		firstMinusButton.setOnClickListener(this);
@@ -54,18 +54,27 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 				clear();
 				break;
 			case R.id.firstMinusButton:
+				if (firstPointCount == 0) {
+					return;
+				}
 				firstPointCount--;
 				break;
 			case R.id.firstPlusButton:
 				firstPointCount++;
 				break;
 			case R.id.secondMinusButton:
+				if (secondPointCount == 0) {
+					return;
+				}
 				secondPointCount--;
 				break;
 			case R.id.secondPlusButton:
 				secondPointCount++;
 				break;
 		}
+
+
+
 		new android.os.Handler(android.os.Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
