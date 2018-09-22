@@ -1,16 +1,21 @@
 package c.local.com.referee;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-	private int firstPointCount = 0;
-	private int secondPointCount = 0;
+	private DatabaseReference mDatabase;
+	private String sid;
+	private Score score;
 
 	private TextView firstPoint;
 	private TextView secondPoint;
@@ -27,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		// スコア
+		this.sid = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+		score = new Score();
 		firstPoint = findViewById(R.id.firstPoint);
 		secondPoint = findViewById(R.id.secondPoint);
 
@@ -43,51 +50,53 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 		secondMinusButton.setOnClickListener(this);
 		secondPlusButton.setOnClickListener(this);
 
-		firstPoint.setText(this.first());
-		secondPoint.setText(this.second());
+		firstPoint.setText(score.first());
+		secondPoint.setText(score.second());
+
+
+		mDatabase = FirebaseDatabase.getInstance().getReference();
+
+		writeScore();
 	}
 
 	@Override
 	public void onClick(android.view.View view) {
 		switch (view.getId()) {
 			case R.id.clear:
-				clear();
+				score.clear();
 				break;
 			case R.id.firstMinusButton:
-				if (firstPointCount == 0) {
+				if (score.firstPoint == 0) {
 					return;
 				}
-				firstPointCount--;
+				score.firstPoint--;
 				break;
 			case R.id.firstPlusButton:
-				firstPointCount++;
+				score.firstPoint++;
 				break;
 			case R.id.secondMinusButton:
-				if (secondPointCount == 0) {
+				if (score.secondPoint == 0) {
 					return;
 				}
-				secondPointCount--;
+				score.secondPoint--;
 				break;
 			case R.id.secondPlusButton:
-				secondPointCount++;
+				score.secondPoint++;
 				break;
 		}
+
+		writeScore();
 		new android.os.Handler(android.os.Looper.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
-				firstPoint.setText(String.valueOf(firstPointCount));
-				secondPoint.setText(String.valueOf(secondPointCount));
+				firstPoint.setText(score.first());
+				secondPoint.setText(score.second());
 			}
 		});
 	}
-	public void clear() {
-		firstPointCount = 0;
-		secondPointCount = 0;
-	}
-	public String first() {
-		return String.valueOf(firstPointCount);
-	}
-	public String second() {
-		return String.valueOf(secondPointCount);
+
+
+	private void writeScore() {
+		mDatabase.child("score").child(this.sid).setValue(score);
 	}
 }
