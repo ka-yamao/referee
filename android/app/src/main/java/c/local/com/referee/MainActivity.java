@@ -1,5 +1,6 @@
 package c.local.com.referee;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	private TextView firstPoint;
 	private TextView secondPoint;
 
+	private Button shareButton;
 	private Button clearButton;
 	private Button firstMinusButton;
 	private Button firstPlusButton;
@@ -38,12 +40,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 		firstPoint = findViewById(R.id.firstPoint);
 		secondPoint = findViewById(R.id.secondPoint);
 
+		shareButton = findViewById(R.id.share);
 		clearButton = findViewById(R.id.clear);
 		firstMinusButton = findViewById(R.id.firstMinusButton);
 		firstPlusButton = findViewById(R.id.firstPlusButton);
 		secondMinusButton = findViewById(R.id.secondMinusButton);
 		secondPlusButton = findViewById(R.id.secondPlusButton);
 
+		shareButton.setOnClickListener(this);
 		clearButton.setOnClickListener(this);
 		firstMinusButton.setOnClickListener(this);
 		firstPlusButton.setOnClickListener(this);
@@ -62,6 +66,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	@Override
 	public void onClick(android.view.View view) {
 		switch (view.getId()) {
+			case R.id.share:
+				Intent intent = new Intent(Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Referee");
+				intent.putExtra(Intent.EXTRA_TEXT, "https://referee-694c6.firebaseapp.com/#" + sid);
+				startActivity(intent);
+				return;
 			case R.id.clear:
 				score.clear();
 				break;
