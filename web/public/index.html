@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.5.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.5.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.5.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/5.5.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/5.5.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <style media="screen">
+        body {
+            background: #ECEFF1;
+            color: rgba(0, 0, 0, 0.87);
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            border-top: 16px solid #ffa100;
+        }
+
+        #message {
+            background: white;
+            margin: 100px auto 16px;
+            padding: 32px 24px;
+            border-radius: 3px;
+        }
+
+        #message h2 {
+            color: #ffa100;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 0 0 8px;
+        }
+
+        #message h1 {
+            font-size: 22px;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.6);
+            margin: 0 0 16px;
+        }
+
+        #message .point {
+            font-size: 300px;
+            line-height: 100%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #message .vs {
+            font-size: 300px;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0px 60px 0px 60px;
+        }
+
+        #load {
+            color: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="message">
+        <h1>Score</h1>
+        <div id="load">
+            <div class="vs">-</div>
+            <div class="vs">-</div>
+            <div class="vs">-</div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var sid = location.hash;
+                if (sid == null || sid == '') {
+                    throw new Error('エラーだよ');
+                }
+                sid = sid.slice(1);
+                const scoreObject = firebase.database().ref().child('score/' + sid);
+                scoreObject.on('value', function (snapshot) {
+                    // console.log(snapshot.val().firstPoint);
+                    var point = snapshot.val();
+                    document.getElementById('load').innerHTML = `<div class="point">${point.firstPoint}</div><div class="vs">-</div><div class="point">${point.secondPoint}</div>`;
+                });
+            } catch (e) {
+                console.error(e);
+                document.getElementById('load').innerHTML = 'Error loading';
+            }
+        });
+    </script>
+</body>
+
+</html>
