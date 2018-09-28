@@ -30,6 +30,16 @@
 				android:text="Referee"
 				/>
 
+			<Button
+				android:id="@+id/qr"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toLeftOf="@id/share"
+				style="?android:attr/borderlessButtonStyle"
+				android:textColor="#FFF"
+				android:textStyle="bold"
+				android:text="QR"/>
 
 			<Button
 				android:id="@+id/share"
